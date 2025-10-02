@@ -1,0 +1,69 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go workspace binaries
+# Binaries built by 'go install'
+# https://go.dev/doc/go-install-command
+~/go/bin/
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Test results
+# Test binary, built with `go test -c`
+# Test cache
+/go.test
+/go.test.cache
+
+# IDEs and editors
+.idea/                  # GoLand
+.vscode/                # VS Code
+.history/               # VS Code Local History
+*.sublime-project       # Sublime Text
+*.sublime-workspace
+.DS_Store               # macOS
+Thumbs.db               # Windows
+ehthumbs.db
+*.log
+*.tmp
+*.bak
+*.swp
+*~.nib
+.fuse_hidden*
+.directory
+
+# Local environment variables
+.env
+.envrc
+
+# Build output directory (if you have a specific one like 'bin' or 'build')
+# For example, if you build your main executable into a 'bin' directory:
+bin/
+build/
+
+# Package cache
+# This is typically located in GOPATH/pkg/mod/cache, but if you have a local cache
+# within your project, you might want to ignore it.
+pkg/
+
+# Go module cache (if not using standard GOPATH)
+# This is usually managed by Go itself and not typically in the project root,
+# but if it somehow ends up there, ignore it.
+# go.mod.sum # This should generally be committed
+# go.sum # This should generally be committed
+
+# Other common temporary files
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
