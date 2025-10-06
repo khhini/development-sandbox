@@ -19,6 +19,7 @@ const run = async () => {
       })
     })
 
+    // Modify Text of Element named "Subtitle 2"
     slide.getElement("Subtitle 2").then((element) => {
       console.log(element)
       slide.modifyElement(element.name, modify.setText("Test Modifying a String"));
