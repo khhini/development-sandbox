@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-contrib/logger"
+	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 )
@@ -11,6 +12,8 @@ import (
 func (s *Server) RegisterRoutes() http.Handler {
 	r := gin.New()
 	gin.SetMode(gin.ReleaseMode)
+
+	pprof.Register(r)
 
 	r.Use(logger.SetLogger(logger.WithLogger(func(c *gin.Context, l zerolog.Logger) zerolog.Logger {
 		return l.Output(gin.DefaultWriter).With().
