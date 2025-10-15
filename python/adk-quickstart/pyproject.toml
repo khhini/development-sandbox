@@ -1,0 +1,19 @@
+[project]
+name = "adk-quickstart"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "google-adk>=1.16.0",
+]
+
+[tool.pyright]
+reportMissingImports = true
+reportUndefinedVariable = true
+reportUnusedVariable = "warning"
+reportGeneralTypeIssues = true
+pythonVersion = "3.13"
+pythonPlatform = "All"
+venvPath = "."
+venv = ".venv"
