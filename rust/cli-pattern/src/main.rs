@@ -1,4 +1,4 @@
-use clap::{Parser, Subcommand};
+use clap::{Args, Parser, Subcommand, command};
 use std::error::Error;
 
 pub trait Command {
@@ -10,8 +10,8 @@ pub trait Command {
 
 #[derive(Subcommand)]
 enum Commands {
-    Init,
-    Deploy { target: String },
+    Init(InitCommand),
+    Deploy(DeployCommand),
 }
 
 #[derive(Parser)]
@@ -21,6 +21,7 @@ struct Cli {
     command: Commands,
 }
 
+#[derive(Args, Debug)]
 pub struct InitCommand;
 
 impl Command for InitCommand {
@@ -34,8 +35,12 @@ impl Command for InitCommand {
     }
 }
 
+#[derive(Args, Debug)]
 pub struct DeployCommand {
     pub target: String,
+
+    #[arg(short('d'), long("debug"), action = clap::ArgAction::SetTrue)]
+    debug: bool,
 }
 
 impl Command for DeployCommand {
@@ -51,8 +56,8 @@ impl Command for DeployCommand {
 
 fn dispatch_command(cli: Cli) -> Box<dyn Command> {
     match cli.command {
-        Commands::Init => Box::new(InitCommand),
-        Commands::Deploy { target } => Box::new(DeployCommand { target }),
+        Commands::Init(cmd) => Box::new(cmd),
+        Commands::Deploy(cmd) => Box::new(cmd),
     }
 }
 
