@@ -26,12 +26,7 @@ steps:
       - -c
       - |
         gcloud builds triggers run ${_CLOUDBUILD_CD_TRIGGER} \
-          --substitutions=_APP_NAME=${_APP_NAME} \
-          --substitutions=_APP_SERVICE=${_APP_SERVICE} \
-          --substitutions=_APP_ENV=${_APP_ENV} \
-          --substitutions=_CLOUD_RUN_SERVICE_YAML_PATH=${_CLOUD_RUN_SERVICE_YAML_PATH} \
-          --substitutions=_ARTIFACT_REGISTRY_URI=${_ARTIFACT_REGISTRY_URI} \
-          --substitutions=_IMAGE_VERSION_TAG=${SHORT_SHA} \
+          --substitutions=_APP_NAME=${_APP_NAME},_APP_SERVICE=${_APP_SERVICE},_DEPLOYMENT_ENV=${_DEPLOYMENT_ENV},_CLOUD_RUN_SERVICE_YAML_PATH=${_CLOUD_RUN_SERVICE_YAML_PATH},_ARTIFACT_REGISTRY_URI=${_ARTIFACT_REGISTRY_URI},_IMAGE_VERSION_TAG=${SHORT_SHA} \
           --branch=${BRANCH_NAME} \
           --region=${LOCATION}
 
