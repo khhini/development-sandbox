@@ -71,7 +71,7 @@ substitutions:
   # TODO: define artifacts or docker registry uri
   # Example:
   #   _ARTIFACT_REGISTRY_URI: asia-southeast2-docker.pkg.dev/khhini/sample-app/backend
-  _ARTIFACj_REGISTRY_URI: asia-southeast2-docker.pkg.dev/khhini-devops-2705/docker-repo
+  _ARTIFACT_REGISTRY_URI: asia-east1-docker.pkg.dev/khhini-devops-2705/docker-repo
 
   # define application image name
   _APP_IMAGE_NAME: ${_APP_NAME}/${_APP_SERVICE}
