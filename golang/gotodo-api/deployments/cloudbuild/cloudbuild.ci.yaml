@@ -2,16 +2,6 @@ steps:
   ###########################
   # CI Pipeline
   ###########################
-  - name: "gcr.io/cloud-builders/gcloud-slim"
-    id: "Define build time env"
-    entrypoint: "/bin/bash"
-    args:
-      - -c
-      - |
-        cat << EOF > ${_BUILD_PATH}/.env
-        ENV=${_DEPLOYMENT_ENV}
-        EOF
-
   - name: "gcr.io/k8s-skaffold/pack"
     id: "Build with buildpack"
     args:
@@ -27,19 +17,17 @@ steps:
       - --publish
 
   ###########################
-  # CD Pipeline
+  # Trigger CD Pipeline
   ###########################
   - name: "gcr.io/cloud-builders/gcloud-slim"
-    id: "Deploy to cloud run"
+    id: "Run deloyment steps"
     entrypoint: "/bin/bash"
     args:
-      - "-c"
+      - -c
       - |
-        # Replaces image to latest build image
-        sed -i "s#image:.*#image: ${_ARTIFACT_REGISTRY_URI}/${_APP_IMAGE_NAME}:${_IMAGE_VERSION_TAG}#g" ${_CLOUD_RUN_SERVICE_YAML_PATH}
-
-        gcloud run services replace ${_CLOUD_RUN_SERVICE_YAML_PATH} \
-          --project=${_CLOUD_RUN_SERVICE_PROJECT}
+        gcloud builds triggers run ${_CLOUDBUILD_CD_TRIGGER} \
+          --branch=${BRANCH_NAME} \
+          --region=${LOCATION}
 
 substitutions:
   # define deployments environments
@@ -73,7 +61,7 @@ substitutions:
   # define path of source project to build
   # Example:
   #   _BUILD_PATH: "./src"
-  _BUILD_PATH: "./golang-todo-app"
+  _BUILD_PATH: "./golang/gotodo-api"
 
   # define builder for buildpack
   # Example:
@@ -83,7 +71,7 @@ substitutions:
   # TODO: define artifacts or docker registry uri
   # Example:
   #   _ARTIFACT_REGISTRY_URI: asia-southeast2-docker.pkg.dev/khhini/sample-app/backend
-  _ARTIFACT_REGISTRY_URI: asia-southeast2-docker.pkg.dev/khhini-devops-2705/docker-repo
+  _ARTIFACj_REGISTRY_URI: asia-southeast2-docker.pkg.dev/khhini-devops-2705/docker-repo
 
   # define application image name
   _APP_IMAGE_NAME: ${_APP_NAME}/${_APP_SERVICE}
@@ -94,6 +82,10 @@ substitutions:
   # define versioning tag based on git tag name
   # set to latest if TAG_NAME not defined
   _IMAGE_VERSION_TAG: ${TAG_NAME:-latest}
+
+  # define cloudbuild CD Pipeline trigger id
+  # set on CI Pipeline Trigger Config
+  _CLOUDBUILD_CD_TRIGGER: cloudbuild_trigger_id
 
 options:
   logging: CLOUD_LOGGING_ONLY
