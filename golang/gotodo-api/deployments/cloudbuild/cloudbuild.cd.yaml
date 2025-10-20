@@ -16,32 +16,46 @@ steps:
 
 substitutions:
   # define deployments environments
+  # Notes:
+  #   set on cloudbuild.yaml Trigger CD pipeline steps
   _DEPLOYMENT_ENV: dev
 
   # define deployments configurations files path
+  # Notes:
+  #   set on cloudbuild.yaml Trigger CD pipeline steps
   _DEPLOYMENT_CONFIG_PATH: ${_BUILD_PATH}/deployments
 
   # define application / project name
   # Example:
   #   _APP_NAME: sample-app
+  # Notes:
+  #   set on cloudbuild.yaml Trigger CD pipeline steps
   _APP_NAME: gotodo
 
   # define application serivice
   # Example:
   #   _APP_SERVICE: backend
+  # Notes:
+  #   set on cloudbuild.yaml Trigger CD pipeline steps
   _APP_SERVICE: api
 
   # define cloud run service yaml file path
+  # Notes:
+  #   set on cloudbuild.yaml Trigger CD pipeline steps
   _CLOUD_RUN_SERVICE_YAML_PATH: ${_DEPLOYMENT_CONFIG_PATH}/services.yaml
 
   # define cloud run service deployment project
   # Example:
   #   _CLOUD_RUN_SERVICE_PROJECT: example-project
+  # Notes:
+  #   set on cloudbuild.yaml Trigger CD pipeline steps
   _CLOUD_RUN_SERVICE_PROJECT: khhini-development-sandbox
 
   # define artifacts or docker registry uri
   # Example:
   #   _ARTIFACT_REGISTRY_URI: asia-southeast2-docker.pkg.dev/khhini/sample-app/backend
+  # Notes:
+  #   set on cloudbuild.yaml Trigger CD pipeline steps
   _ARTIFACT_REGISTRY_URI: asia-east1-docker.pkg.dev/khhini/docker-repo
 
   # define application image name
@@ -49,6 +63,8 @@ substitutions:
 
   # define versioning tag based on git tag name
   # set to latest if TAG_NAME not defined
+  # Notes:
+  #   set on cloudbuild.yaml Trigger CD pipeline steps
   _IMAGE_VERSION_TAG: ${SHORT_SHA:-latest}
 
 options:

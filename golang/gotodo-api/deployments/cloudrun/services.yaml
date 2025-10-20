@@ -6,15 +6,14 @@ metadata:
     run.googleapis.com/ingress-status: all
     run.googleapis.com/urls: '["https://gotodo-api-dev-prd-425714598829.asia-southeast2.run.app","https://gotodo-api-dev-prd-pl4w5rc6ea-et.a.run.app"]'
   labels:
-    cloud.googleapis.com/location: asia-southeast2
-    run.googleapis.com/satisfiesPzs: 'true'
+    run.googleapis.com/satisfiesPzs: "true"
   name: gotodo-api-dev-prd
-  namespace: '425714598829'
+  namespace: "425714598829"
 spec:
   template:
     metadata:
       annotations:
-        autoscaling.knative.dev/maxScale: '3'
+        autoscaling.knative.dev/maxScale: "3"
         run.googleapis.com/network-interfaces: '[{"network":"poc-dev-sandbox-vpc","subnetwork":"poc-dev-sandbox-jkt-sub"}]'
         run.googleapis.com/vpc-access-egress: private-ranges-only
       labels:
@@ -22,27 +21,27 @@ spec:
     spec:
       containerConcurrency: 80
       containers:
-      - env:
-        - name: env
-          value: dev
-        - name: LOG_LEVEL
-          value: info
-        image: asia-southeast2-docker.pkg.dev/khhini-devops-2705/docker-repo/gotodo/api:latest
-        ports:
-        - containerPort: 8080
-          name: http1
-        resources:
-          limits:
-            cpu: 1000m
-            memory: 512Mi
-        startupProbe:
-          failureThreshold: 1
-          periodSeconds: 240
-          tcpSocket:
-            port: 8080
-          timeoutSeconds: 240
+        - env:
+            - name: env
+              value: dev
+            - name: LOG_LEVEL
+              value: info
+          image: asia-southeast2-docker.pkg.dev/khhini-devops-2705/docker-repo/gotodo/api:latest
+          ports:
+            - containerPort: 8080
+              name: http1
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 512Mi
+          startupProbe:
+            failureThreshold: 1
+            periodSeconds: 240
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 240
       serviceAccountName: 425714598829-compute@developer.gserviceaccount.com
       timeoutSeconds: 300
   traffic:
-  - latestRevision: true
-    percent: 100
+    - latestRevision: true
+      percent: 100

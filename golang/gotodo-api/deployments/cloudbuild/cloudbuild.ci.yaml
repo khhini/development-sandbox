@@ -20,13 +20,13 @@ steps:
   # Trigger CD Pipeline
   ###########################
   - name: "gcr.io/cloud-builders/gcloud-slim"
-    id: "Run deloyment steps"
+    id: "Trigger CD pipeline"
     entrypoint: "/bin/bash"
     args:
       - -c
       - |
         gcloud builds triggers run ${_CLOUDBUILD_CD_TRIGGER} \
-          --substitutions=_APP_NAME=${_APP_NAME},_APP_SERVICE=${_APP_SERVICE},_DEPLOYMENT_ENV=${_DEPLOYMENT_ENV},_CLOUD_RUN_SERVICE_YAML_PATH=${_CLOUD_RUN_SERVICE_YAML_PATH},_ARTIFACT_REGISTRY_URI=${_ARTIFACT_REGISTRY_URI},_IMAGE_VERSION_TAG=${SHORT_SHA} \
+          --substitutions=_APP_NAME=${_APP_NAME},_APP_SERVICE=${_APP_SERVICE},_DEPLOYMENT_ENV=${_DEPLOYMENT_ENV},_CLOUD_RUN_SERVICE_YAML_PATH=${_CLOUD_RUN_SERVICE_YAML_PATH},_ARTIFACT_REGISTRY_URI=${_ARTIFACT_REGISTRY_URI},_IMAGE_VERSION_TAG=${SHORT_SHA},_CLOUD_RUN_SERVICE_PROJECT=${_CLOUD_RUN_SERVICE_PROJECT} \
           --branch=${BRANCH_NAME} \
           --region=${LOCATION}
 
@@ -47,16 +47,12 @@ substitutions:
   #   _APP_SERVICE: backend
   _APP_SERVICE: api
 
-  # define cloud run service name
-  # _CLOUD_RUN_SERVICE_NAME: ${_APP_NAME}-${_APP_SERVICE}-${_APP_ENV}-src
-  #
   # define cloud run service yaml file path
   _CLOUD_RUN_SERVICE_YAML_PATH: ${_DEPLOYMENT_CONFIG_PATH}/cloudrun/services.yaml
   #
   # define cloud run service deployment project
   # Example:
   #   _CLOUD_RUN_SERVICE_PROJECT: example-project
-
   _CLOUD_RUN_SERVICE_PROJECT: khhini-development-sandbox
 
   # define path of source project to build
@@ -69,7 +65,7 @@ substitutions:
   #   _BUILDPACK_BUILDER: "gcr.io/buildpacks/builder:latest"
   _BUILDPACK_BUILDER: "gcr.io/buildpacks/builder:latest"
 
-  # TODO: define artifacts or docker registry uri
+  # define artifacts or docker registry uri
   # Example:
   #   _ARTIFACT_REGISTRY_URI: asia-southeast2-docker.pkg.dev/khhini/sample-app/backend
   _ARTIFACT_REGISTRY_URI: asia-east1-docker.pkg.dev/khhini-devops-2705/docker-repo
