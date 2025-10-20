@@ -31,7 +31,7 @@ steps:
           --substitutions=_APP_ENV=${_APP_ENV} \
           --substitutions=_CLOUD_RUN_SERVICE_YAML_PATH=${_CLOUD_RUN_SERVICE_YAML_PATH} \
           --substitutions=_ARTIFACT_REGISTRY_URI=${_ARTIFACT_REGISTRY_URI} \
-          --substitutions=_IMAGE_VERSION_TAG=${SHORT_SHA}
+          --substitutions=_IMAGE_VERSION_TAG=${SHORT_SHA} \
           --branch=${BRANCH_NAME} \
           --region=${LOCATION}
 
