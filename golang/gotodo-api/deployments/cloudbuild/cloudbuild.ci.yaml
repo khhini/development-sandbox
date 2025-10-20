@@ -58,7 +58,7 @@ substitutions:
   # define cloud run service deployment region
   # Example:
   #   _CLOUD_RUN_SERVICE_PROJECT: example-project
-  _CLOUD_RUN_SERVICE_REGION: asia-east1
+  _CLOUD_RUN_SERVICE_REGION: asia-southeast2
 
   # define path of source project to build
   # Example:
