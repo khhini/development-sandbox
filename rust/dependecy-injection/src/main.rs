@@ -17,12 +17,12 @@ impl Logger for MockLogger {
     }
 }
 
-pub struct UserService<'a> {
-    logger: &'a dyn Logger,
+pub struct UserService<T: Logger> {
+    logger: T,
 }
 
-impl<'a> UserService<'a> {
-    pub fn new(logger: &'a dyn Logger) -> Self {
+impl<T: Logger> UserService<T> {
+    pub fn new(logger: T) -> Self {
         Self { logger }
     }
 
@@ -34,12 +34,12 @@ impl<'a> UserService<'a> {
 #[test]
 fn test_user_creation_logs() {
     let logger = MockLogger;
-    let service = UserService::new(&logger);
+    let service = UserService::new(logger);
     service.create_user("test_user");
 }
 
 fn main() {
     let logger = MockLogger;
-    let service = UserService::new(&logger);
+    let service = UserService::new(logger);
     service.create_user("khhini");
 }
