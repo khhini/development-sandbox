@@ -1,4 +1,5 @@
 -- Add migration script here
+-- sqlfluff:dialect:postgres
 INSERT INTO hotels(id, name, location, price_tier, checkin_date, checkout_date, booked)
 VALUES
   (1, 'Hilton Basel', 'Basel', 'Luxury', '2024-04-22', '2024-04-20', B'0'),

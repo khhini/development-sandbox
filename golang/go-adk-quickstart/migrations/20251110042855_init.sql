@@ -1,4 +1,5 @@
 -- Add migration script here
+-- sqlfluff:dialect:postgres
 CREATE TABLE hotels(
   id            INTEGER NOT NULL PRIMARY KEY,
   name          VARCHAR NOT NULL,

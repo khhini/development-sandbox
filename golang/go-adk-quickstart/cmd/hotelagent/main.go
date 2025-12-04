@@ -2,17 +2,15 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
-	"strings"
 
 	"github.com/googleapis/mcp-toolbox-sdk-go/tbadk"
-	"google.golang.org/adk/agent"
 	"google.golang.org/adk/agent/llmagent"
+	"google.golang.org/adk/cmd/launcher/adk"
+	"google.golang.org/adk/cmd/launcher/full"
 	"google.golang.org/adk/model/gemini"
-	"google.golang.org/adk/runner"
-	"google.golang.org/adk/session"
+	"google.golang.org/adk/server/restapi/services"
 	"google.golang.org/adk/tool"
 	"google.golang.org/genai"
 )
@@ -75,50 +73,13 @@ func main() {
 		log.Fatalf("Failed to create agent: %v", err)
 	}
 
-	appName := "hotel_assistant"
-	userID := "user-123"
+	config := &adk.Config{
+		AgentLoader: services.NewSingleAgentLoader(llmagent),
+	}
 
-	sessionService := session.InMemoryService()
-	resp, err := sessionService.Create(ctx, &session.CreateRequest{
-		AppName: appName,
-		UserID:  userID,
-	})
+	l := full.NewLauncher()
+	err = l.Execute(ctx, config, os.Args[1:])
 	if err != nil {
-		log.Fatalf("Failed to create the sessiokn service: %v", err)
+		log.Fatalf("run failed: %v\n\n%s", err, l.CommandLineSyntax())
 	}
-	session := resp.Session
-
-	r, err := runner.New(runner.Config{
-		AppName:        appName,
-		Agent:          llmagent,
-		SessionService: sessionService,
-	})
-	if err != nil {
-		log.Fatalf("Failed to create runner: %v", err)
-	}
-
-	for i, query := range queriesAdk {
-		fmt.Printf("\n=== Query %d: %s ===\n", i+1, query)
-		userMsg := genai.NewContentFromText(query, genai.RoleUser)
-
-		streamingMode := agent.StreamingModeSSE
-		for event, err := range r.Run(ctx, userID, session.ID(), userMsg, agent.RunConfig{
-			StreamingMode: streamingMode,
-		}) {
-			if err != nil {
-				fmt.Printf("\nAGENT_ERROR: %v\n", err)
-			} else {
-				if event.LLMResponse.Content != nil {
-					for _, p := range event.LLMResponse.Content.Parts {
-						// if its running in streaming mode, don't print the non partial llmResponses
-						if streamingMode != agent.StreamingModeSSE || event.LLMResponse.Partial {
-							fmt.Print(p.Text)
-						}
-					}
-				}
-			}
-		}
-	}
-
-	fmt.Println("\n", strings.Repeat("-", 80)+"\n")
 }
