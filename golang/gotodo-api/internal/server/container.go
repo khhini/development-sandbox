@@ -31,11 +31,10 @@ func WithHealthHandler() ContainerOption {
 	}
 }
 
-func WithTaskHandler(tasksMemory map[string]*domain.Task) ContainerOption {
-	repo := inmemory.NewInMemoryTaskRepository(tasksMemory)
+func WithTaskHandler(memory map[string]*domain.Task) ContainerOption {
+	repo := inmemory.NewInMemoryTaskRepository(memory)
 	uc := usecases.NewTaskService(repo)
 	handler := httphandler.NewTaskHandler(uc)
-
 	return func(ctr *Container) {
 		ctr.taskHandler = &handler
 	}

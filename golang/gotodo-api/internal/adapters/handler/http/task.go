@@ -1,10 +1,11 @@
 package httphandler
 
 import (
+	"context"
 	"fmt"
-	"net/http"
+	"time"
 
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 	"github.com/khhini/golang-todo-app/internal/core/dto"
 	"github.com/khhini/golang-todo-app/internal/core/ports"
 )
@@ -19,38 +20,41 @@ func NewTaskHandler(uc ports.TaskUsecase) TaskHandler {
 	}
 }
 
-func (h TaskHandler) Create(ctx *gin.Context) {
-	var req dto.CreateTaskRequest
+func (h TaskHandler) Create(ctx *fiber.Ctx) error {
+	stdCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+	req := new(dto.CreateTaskRequest)
+
+	if err := ctx.BodyParser(req); err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": fmt.Sprintf("failed formatting input: %v", err),
 		})
-		return
 	}
 
-	if err := h.uc.Create(ctx, &req); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+	if err := h.uc.Create(stdCtx, req); err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": fmt.Sprintf("failed create new task: %v", err),
 		})
-		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
-		"messsage": "new task created",
+	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"message": "new task created",
 	})
 }
 
-func (h TaskHandler) GetAll(ctx *gin.Context) {
-	data, err := h.uc.GetAll(ctx)
+func (h TaskHandler) GetAll(ctx *fiber.Ctx) error {
+	stdCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	data, err := h.uc.GetAll(stdCtx)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": fmt.Sprintf("failed get all data: %v", err),
 		})
-		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "OK",
 		"data":    data,
 	})

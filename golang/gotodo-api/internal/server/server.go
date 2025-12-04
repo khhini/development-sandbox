@@ -1,38 +1,41 @@
 package server
 
 import (
-	"fmt"
-	"net/http"
 	"time"
 
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/khhini/golang-todo-app/internal/config"
 	"github.com/khhini/golang-todo-app/internal/core/domain"
 )
 
 type Server struct {
-	host string
-	port int
+	app  *fiber.App
 	cntr *Container
 }
 
-func NewServer(cfg config.Config) *http.Server {
+func NewServer(cfg config.Config) *fiber.App {
+	app := fiber.New(fiber.Config{
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	})
+
+	app.Use(logger.New())
+
 	taskMemory := make(map[string]*domain.Task)
 
 	container := NewContainer(
 		WithHealthHandler(),
 		WithTaskHandler(taskMemory),
 	)
+
 	newServer := Server{
-		host: cfg.Host,
-		port: cfg.Port,
+		app:  app,
 		cntr: container,
 	}
 
-	return &http.Server{
-		Addr:         fmt.Sprintf("%s:%d", newServer.host, newServer.port),
-		Handler:      newServer.RegisterRoutes(),
-		IdleTimeout:  time.Minute,
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 10 * time.Second,
-	}
+	newServer.RegisterRoutes()
+
+	return app
 }

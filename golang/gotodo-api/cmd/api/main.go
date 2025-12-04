@@ -1,8 +1,8 @@
 package main
 
 import (
+	"fmt"
 	"log"
-	"net/http"
 
 	"github.com/khhini/golang-todo-app/internal/config"
 	"github.com/khhini/golang-todo-app/internal/server"
@@ -18,8 +18,7 @@ func main() {
 
 	svr := server.NewServer(cfg)
 
-	err = svr.ListenAndServe()
-	if err != nil && err != http.ErrServerClosed {
+	if err := svr.Listen(fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)); err != nil {
 		log.Fatalf("http server error: %v", err)
 	}
 }
