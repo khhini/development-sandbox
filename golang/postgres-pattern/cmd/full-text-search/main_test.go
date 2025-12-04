@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
 func TestSearchArticles(t *testing.T) {

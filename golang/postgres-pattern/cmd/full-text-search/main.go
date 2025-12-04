@@ -31,18 +31,8 @@ func searchArticles(db *sqlx.DB, query string) ([]Article, error) {
 		LIMIT 20
 	`
 
-	rows, err := db.Query(sqlQuery, query)
-	if err != nil {
+	if err := db.Select(&articles, sqlQuery, query); err != nil {
 		return nil, fmt.Errorf("search failed: %w", err)
-	}
-
-	for rows.Next() {
-		var article Article
-		if err := rows.Scan(&article.ID, &article.Title, &article.Content, &article.Rank); err != nil {
-			return nil, err
-		}
-
-		articles = append(articles, article)
 	}
 
 	return articles, nil
