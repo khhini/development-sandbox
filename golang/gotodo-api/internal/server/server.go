@@ -1,12 +1,13 @@
 package server
 
 import (
+	"context"
 	"os"
 
 	"github.com/gofiber/contrib/fiberzerolog"
 	"github.com/gofiber/fiber/v2"
+	"github.com/jackc/pgx/v5"
 	"github.com/khhini/golang-todo-app/internal/config"
-	"github.com/khhini/golang-todo-app/internal/core/domain"
 	"github.com/rs/zerolog"
 )
 
@@ -17,6 +18,7 @@ type Server struct {
 
 func NewServer(cfg config.Config) *fiber.App {
 	app := fiber.New(fiber.Config{})
+	ctx := context.Background()
 
 	zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	logger := zerolog.New(os.Stderr).With().Timestamp().Logger()
@@ -25,11 +27,14 @@ func NewServer(cfg config.Config) *fiber.App {
 		Logger: &logger,
 	}))
 
-	taskMemory := make(map[string]*domain.Task)
+	conn, err := pgx.Connect(ctx, os.Getenv("DATABASE_URL"))
+	if err != nil {
+		logger.Err(err)
+	}
 
 	container := NewContainer(
 		WithHealthHandler(),
-		WithTaskHandler(taskMemory),
+		WithTaskHandler(conn),
 	)
 
 	newServer := Server{

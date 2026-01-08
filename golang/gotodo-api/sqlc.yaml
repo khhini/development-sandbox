@@ -1,0 +1,10 @@
+version: "2"
+sql:
+  - engine: postgresql
+    queries: db/query/tasks.sql
+    schema: db/migrations/20260108072142_init_schema.up.sql
+    gen:
+      go:
+        package: tasks
+        out: internal/infra/sqlc/tasks
+        sql_package: "pgx/v5"
