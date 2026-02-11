@@ -10,6 +10,8 @@ import (
 	"github.com/khhini/golang-todo-app/internal/core/ports"
 )
 
+const timeout = 10 * time.Second
+
 type TaskHandler struct {
 	uc ports.TaskUsecase
 }
@@ -21,7 +23,7 @@ func NewTaskHandler(uc ports.TaskUsecase) TaskHandler {
 }
 
 func (h TaskHandler) Create(ctx *fiber.Ctx) error {
-	stdCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	stdCtx, cancel := context.WithTimeout(ctx.Context(), timeout)
 	defer cancel()
 
 	req := new(dto.CreateTaskRequest)
@@ -44,7 +46,7 @@ func (h TaskHandler) Create(ctx *fiber.Ctx) error {
 }
 
 func (h TaskHandler) GetAll(ctx *fiber.Ctx) error {
-	stdCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	stdCtx, cancel := context.WithTimeout(ctx.Context(), timeout)
 	defer cancel()
 
 	data, err := h.uc.GetAll(stdCtx)
