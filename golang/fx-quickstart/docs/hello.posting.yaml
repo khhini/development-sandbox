@@ -1,0 +1,9 @@
+name: Hello
+method: POST
+url: http://localhost:8080/hello
+body:
+  content: hello
+  content_type: application/json
+headers:
+- name: content-type
+  value: application/json

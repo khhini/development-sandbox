@@ -1,0 +1,9 @@
+name: Echo
+method: POST
+url: http://localhost:8080/echo
+body:
+  content: hello
+  content_type: application/json
+headers:
+- name: content-type
+  value: application/json
