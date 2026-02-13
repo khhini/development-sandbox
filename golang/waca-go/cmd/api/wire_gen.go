@@ -9,16 +9,24 @@ package main
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/wire"
+	"github.com/khhini/development-sandbox/golang/waca-go/internal/adapter/handlers"
 	"github.com/khhini/development-sandbox/golang/waca-go/internal/server"
 )
 
 // Injectors from wire.go:
 
 func InitializeServer() (*fiber.App, error) {
-	app := server.NewServer()
+	healthHandler := handlers.NewHealthHandler()
+	handlerRegistry := &server.HandlerRegistry{
+		Health: healthHandler,
+	}
+	serverOptions := server.ServerOptions{
+		H: handlerRegistry,
+	}
+	app := server.NewServer(serverOptions)
 	return app, nil
 }
 
 // wire.go:
 
-var serverProviderSet = wire.NewSet(server.NewServer)
+var providerSet = wire.NewSet(handlers.NewHealthHandler, wire.Struct(new(server.ServerOptions), "*"), wire.Struct(new(server.HandlerRegistry), "*"), server.NewServer)
