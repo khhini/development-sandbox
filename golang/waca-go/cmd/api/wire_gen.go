@@ -11,22 +11,20 @@ import (
 	"github.com/google/wire"
 	"github.com/khhini/development-sandbox/golang/waca-go/internal/adapter/handlers"
 	"github.com/khhini/development-sandbox/golang/waca-go/internal/server"
+	"github.com/rs/zerolog"
 )
 
 // Injectors from wire.go:
 
-func InitializeServer() (*fiber.App, error) {
+func InitializeServer(logger *zerolog.Logger) (*fiber.App, error) {
 	healthHandler := handlers.NewHealthHandler()
 	handlerRegistry := &server.HandlerRegistry{
 		Health: healthHandler,
 	}
-	serverOptions := server.ServerOptions{
-		H: handlerRegistry,
-	}
-	app := server.NewServer(serverOptions)
+	app := server.NewServer(logger, handlerRegistry)
 	return app, nil
 }
 
 // wire.go:
 
-var providerSet = wire.NewSet(handlers.NewHealthHandler, wire.Struct(new(server.ServerOptions), "*"), wire.Struct(new(server.HandlerRegistry), "*"), server.NewServer)
+var providerSet = wire.NewSet(handlers.NewHealthHandler, wire.Struct(new(server.HandlerRegistry), "*"), server.NewServer)

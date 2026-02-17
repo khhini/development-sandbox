@@ -3,8 +3,10 @@ module github.com/khhini/development-sandbox/golang/waca-go
 go 1.25.5
 
 require (
+	github.com/gofiber/contrib/fiberzerolog v1.0.3
 	github.com/gofiber/fiber/v2 v2.52.11
 	github.com/google/wire v0.7.0
+	github.com/rs/zerolog v1.34.0
 )
 
 require (
