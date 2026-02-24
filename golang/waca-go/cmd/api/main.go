@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/khhini/development-sandbox/golang/waca-go/internal/config"
+	"github.com/khhini/development-sandbox/golang/waca-go/config"
 	"github.com/khhini/development-sandbox/golang/waca-go/pkg/logger"
 )
 
