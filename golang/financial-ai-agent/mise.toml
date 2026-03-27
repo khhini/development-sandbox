@@ -1,0 +1,6 @@
+[env]
+'_'.file = { path = ".env" }
+
+[tasks]
+adk-cli = "go run ./cmd/agent/"
+adk-web = "go run ./cmd/agent/ web api webui"
