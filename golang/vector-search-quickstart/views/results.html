@@ -1,0 +1,12 @@
+{{ range .Results }}
+<div class="search-item">
+    <div class="item-header">
+        <span class="item-name">{{ .Name }}</span>
+        <span class="item-divider">—</span>
+        <span class="item-match">{{ printf "%.2f" .Similarity }}%</span>
+    </div>
+    <p class="item-description">{{ .Description }}</p>
+</div>
+{{ else }}
+<p class="no-results">No matches found.</p>
+{{ end }}

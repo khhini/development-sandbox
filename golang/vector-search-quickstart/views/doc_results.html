@@ -1,0 +1,14 @@
+{{ range .Docs }}
+<div class="doc-item">
+    <div class="doc-header">
+        {{ .Name }} 
+        <span class="similarity">— Score: {{ printf "%.2f" .Similarity }}</span>
+    </div>
+    <div class="content-snippet">
+        "{{ .Content }}"
+    </div>
+    <div class="pages">Page Number: {{ .PageNumber }}</div>
+</div>
+{{ else }}
+<p>No documents found matching your query.</p>
+{{ end }}

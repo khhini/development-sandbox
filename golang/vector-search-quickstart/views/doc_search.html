@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <title>Document Search</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 40px auto; line-height: 1.6; }
+        .doc-item { border-left: 4px solid #3498db; padding: 15px; margin-bottom: 20px; background: #f9f9f9; }
+        .doc-header { font-weight: bold; font-size: 1.1rem; }
+        .similarity { color: #e67e22; float: right; }
+        .content-snippet { color: #555; font-style: italic; margin: 10px 0; }
+        .pages { font-size: 0.8rem; color: #888; }
+        input { width: 100%; padding: 10px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    {{ template "components/nav" . }}
+    <h1>Document Search</h1>
+    <input type="text" name="q" placeholder="Search in documents..." 
+           hx-post="/doc-search" hx-trigger="keyup changed delay:300ms" hx-target="#doc-results">
+    
+    <div id="doc-results"></div>
+</body>
+</html>
